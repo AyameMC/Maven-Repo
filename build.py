@@ -1,169 +1,187 @@
 import os
 import json
 import hashlib
-import markdown
-from io import StringIO  # for capturing markdown output
 
 css_styles = """
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 body {
+  display: flex; /* 使用 Flexbox 布局 */
+  flex-direction: column; /* 垂直排列子元素 */
+  min-height: 100vh; /* 确保页面高度至少为 100vh */
   font-family: 'Roboto', sans-serif;
-  background-color: #f0f2f5;
-  color: #333;
+  background-color: #f4f7f8; /* 更柔和的背景色 */
+  color: #333333; /* 更深的文本颜色 */
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  align-items: center; /* 让内容水平居中 */
+  justify-content: center; /* 让内容垂直居中 */
 }
 
-.container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 25px;
-  background: #ffffff;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.container:hover {
-  transform: translateY(-5px);
-}
-
-h1 {
-  font-size: 2.8em;
-  font-weight: 700;
-  margin-bottom: 1em;
-  color: #333;
+.header {
   text-align: center;
+  padding: 40px 20px 20px;
+  background-color: #007bff; /* 主色调 */
+  color: #ffffff; /* 白色文字 */
+  border-radius: 10px 10px 0 0; /* 圆角 */
+}
+
+.header h1 {
+  font-size: 3em;
+  font-weight: 700;
+  margin: 0;
   line-height: 1.2;
 }
 
-hr {
-  border: 1px solid #ddd;
-  margin: 2em 0;
+.subheader {
+  color: #ffffff; /* 白色子标题 */
+  font-size: 1.1em;
+  margin-top: 10px;
+}
+
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 内容顶部对齐 */
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px; /* 设置最大宽度 */
+  width: 90%; /* 确保在小屏幕上宽度自适应 */
+  border: 1px solid #cccccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 更加柔和的阴影 */
+  background-color: #ffffff; /* 内容区域背景色 */
 }
 
 a {
-  color: #007bff;
+  color: #007bff; /* 链接颜色与主色调一致 */
   text-decoration: none;
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
 a:hover {
-  color: #0056b3;
+  color: #0056b3; /* 悬停时颜色变化 */
   transform: scale(1.05);
 }
 
-.dir, .file {
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.dir a, .file a {
-  display: inline-block;
-  width: 100%;
-  max-width: 250px;
-  padding: 15px;
-  border-radius: 8px;
-  background-color: #e9ecef;
-  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.3s ease;
-  font-weight: 500;
-  text-transform: capitalize;
-}
-
-.dir a:hover, .file a:hover {
-  background-color: #d4d9df;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transform: translateY(-3px);
-}
-
 .info {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #f9fafb;
-  margin-bottom: 2em;
+  margin-bottom: 20px;
+  background: #f9f9f9;
   line-height: 1.8;
   font-size: 1.1em;
   text-align: left;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 添加信息框的阴影 */
+}
+
+.current-path {
+  margin-bottom: 20px;
+  color: #666666;
+  font-size: 1em;
+  text-align: left; /* 居左对齐 */
+  width: 100%;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+ul li {
+  margin-bottom: 10px;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f6f6f6;
+  transition: transform 0.3s ease, background-color 0.3s ease; /* 添加背景色过渡效果 */
+}
+
+ul li:hover {
+  transform: scale(1.02);
+  background-color: #eaeaea; /* 悬停时背景色变化 */
+}
+
+ul li a {
+  color: #007bff; /* 与链接一致的颜色 */
+  transition: color 0.3s ease;
+}
+
+ul li a:hover {
+  color: #0056b3; /* 悬停时颜色变化 */
 }
 
 .footer {
   text-align: center;
-  margin-top: 3em;
-  font-size: 0.95em;
-  color: #666;
-  padding: 15px 0;
-  background: #f8f9fa;
-  border-top: 1px solid #ddd;
+  padding: 20px;
+  font-size: 1em;
+  color: #777777;
+  background: #f2f2f2;
+  margin-top: 40px;
+  border-radius: 0 0 10px 10px; /* 圆角 */
 }
 
-.button {
-  display: inline-block;
-  padding: 10px 20px;
-  border: 2px solid #007bff;
-  background-color: transparent;
-  border-radius: 5px;
-  color: #007bff;
-  text-transform: uppercase;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.button:hover {
-  background-color: #007bff;
-  color: #ffffff;
+.loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background-color: #007bff; /* 进度条颜色 */
+  width: 0;
+  transition: width 0.5s ease-out;
 }
 
 @media (max-width: 768px) {
-  h1 {
-    font-size: 2.2em;
+  .header h1 {
+    font-size: 2.5em;
   }
 
-  .container {
-    padding: 20px;
-  }
-
-  a {
-    font-size: 1em;
-  }
-  
-  .dir a, .file a {
-    width: auto;
-    max-width: none;
+  .content {
+    padding: 15px;
   }
 }
 """
 
-# Update the HTML template to use the new container class
+# Update the HTML template for a list-based layout and new header structure
 template = '''
 <html>
     <head>
     <meta charset="utf-8">
-    <title>{full_path} - AyameMC Maven Repo</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <style>{css_styles}</style>
+    <script>
+        window.onload = function() {{
+            document.querySelector(".loading-bar").style.width = "100%";
+            setTimeout(function() {{
+                document.querySelector(".loading-bar").style.opacity = "0";
+            }}, 500);
+        }};
+    </script>
     </head>
     <body>
-        <div class="container">
-            <h1>{full_path} - AyameMC Maven Repo</h1>
-            <hr>
-            {info}
-            <hr>
-            <a href="../" class="button">../</a><br><br>
-            {content}
-            <hr>
-            <div class="footer">Generated by AyameMC Maven Repo Generator</div>
+        <div class="loading-bar"></div>
+        <div class="content">
+            
+            <div class="current-path">
+                {current_path}
+            </div>
+            <ul>
+                {content}
+            </ul>
         </div>
+        <div class="footer">Generated by AyameMC Directory Generator</div>
     </body>
 </html>
 '''
 
-
-dir_template = '<div class="dir"><a href="{dir_name}/index.html">{dir_name} (dir)</a></div>'
-file_template = '<div class="file"><a href="{file_name}">{file_name}</a></div>'
+# 修改文件夹模板以在名称后添加斜杠
+dir_template = '<li><a href="{dir_name}/">{dir_name}/</a></li>'
+file_template = '<li><a href="{file_name}">{file_name}</a></li>'
 
 def generate_index_html(root_dir):
     for root, dirs, files in os.walk(root_dir):
@@ -171,10 +189,19 @@ def generate_index_html(root_dir):
         dirs[:] = [d for d in dirs if not d.startswith('.')]
         files = [f for f in files if not f.startswith('.')]
 
-        content = ''
-        full_path = os.path.relpath(root, root_dir)
+        # 隐藏根目录的 build.py 和 build.sh 文件
+        if root == root_dir:
+            files = [f for f in files if f not in ['build.py', 'build.sh']]
+            content = ''  # 初始化内容为空
+        else:
+            content = '<li><a href="../">../</a></li>'  # 在非根目录下显示返回上一级的链接
+
+        # Generate current path information
+        current_path = os.path.relpath(root, start=root_dir)
+        current_path = current_path.replace('\\', '/')  # for Windows compatibility
+
         for dir_name in dirs:
-            content += dir_template.format(dir_name=dir_name)
+            content += dir_template.format(dir_name=dir_name)  # 添加斜杠
         for file_name in files:
             if file_name not in ['index.html', 'info.json', 'info.md']:
                 content += file_template.format(file_name=file_name)
@@ -196,19 +223,7 @@ def generate_index_html(root_dir):
         with open(os.path.join(root, 'info.json'), 'w') as info_file:
             json.dump(info, info_file, indent=4)
 
-        # Process info.md to HTML
-        info_md_path = os.path.join(root, 'info.md')
-        info_placeholder = ''
-        if os.path.exists(info_md_path):
-            with open(info_md_path, 'r', encoding='utf-8') as md_file:
-                info_md_content = md_file.read()
-                # Capture markdown output in a string buffer
-                output_buffer = StringIO()
-                markdown.markdown(info_md_content, output_buffer)
-                info_html_content = output_buffer.getvalue()
-                info_placeholder = '<div class="info">{}</div>'.format(info_html_content)
-
-        index_content = template.format(full_path=full_path, content=content, info=info_placeholder, css_styles=css_styles)
+        index_content = template.format(current_path=current_path, content=content, css_styles=css_styles)
         with open(os.path.join(root, 'index.html'), 'w') as f:
             f.write(index_content)
 

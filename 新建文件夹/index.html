@@ -2,151 +2,171 @@
 <html>
     <head>
     <meta charset="utf-8">
-    <title>新建文件夹 - AyameMC Maven Repo</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 body {
+  display: flex; /* 使用 Flexbox 布局 */
+  flex-direction: column; /* 垂直排列子元素 */
+  min-height: 100vh; /* 确保页面高度至少为 100vh */
   font-family: 'Roboto', sans-serif;
-  background-color: #f0f2f5;
-  color: #333;
+  background-color: #f4f7f8; /* 更柔和的背景色 */
+  color: #333333; /* 更深的文本颜色 */
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  align-items: center; /* 让内容水平居中 */
+  justify-content: center; /* 让内容垂直居中 */
 }
 
-.container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 25px;
-  background: #ffffff;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.container:hover {
-  transform: translateY(-5px);
-}
-
-h1 {
-  font-size: 2.8em;
-  font-weight: 700;
-  margin-bottom: 1em;
-  color: #333;
+.header {
   text-align: center;
+  padding: 40px 20px 20px;
+  background-color: #007bff; /* 主色调 */
+  color: #ffffff; /* 白色文字 */
+  border-radius: 10px 10px 0 0; /* 圆角 */
+}
+
+.header h1 {
+  font-size: 3em;
+  font-weight: 700;
+  margin: 0;
   line-height: 1.2;
 }
 
-hr {
-  border: 1px solid #ddd;
-  margin: 2em 0;
+.subheader {
+  color: #ffffff; /* 白色子标题 */
+  font-size: 1.1em;
+  margin-top: 10px;
+}
+
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 内容顶部对齐 */
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px; /* 设置最大宽度 */
+  width: 90%; /* 确保在小屏幕上宽度自适应 */
+  border: 1px solid #cccccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 更加柔和的阴影 */
+  background-color: #ffffff; /* 内容区域背景色 */
 }
 
 a {
-  color: #007bff;
+  color: #007bff; /* 链接颜色与主色调一致 */
   text-decoration: none;
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
 a:hover {
-  color: #0056b3;
+  color: #0056b3; /* 悬停时颜色变化 */
   transform: scale(1.05);
 }
 
-.dir, .file {
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.dir a, .file a {
-  display: inline-block;
-  width: 100%;
-  max-width: 250px;
-  padding: 15px;
-  border-radius: 8px;
-  background-color: #e9ecef;
-  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.3s ease;
-  font-weight: 500;
-  text-transform: capitalize;
-}
-
-.dir a:hover, .file a:hover {
-  background-color: #d4d9df;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transform: translateY(-3px);
-}
-
 .info {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #f9fafb;
-  margin-bottom: 2em;
+  margin-bottom: 20px;
+  background: #f9f9f9;
   line-height: 1.8;
   font-size: 1.1em;
   text-align: left;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 添加信息框的阴影 */
+}
+
+.current-path {
+  margin-bottom: 20px;
+  color: #666666;
+  font-size: 1em;
+  text-align: left; /* 居左对齐 */
+  width: 100%;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+ul li {
+  margin-bottom: 10px;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f6f6f6;
+  transition: transform 0.3s ease, background-color 0.3s ease; /* 添加背景色过渡效果 */
+}
+
+ul li:hover {
+  transform: scale(1.02);
+  background-color: #eaeaea; /* 悬停时背景色变化 */
+}
+
+ul li a {
+  color: #007bff; /* 与链接一致的颜色 */
+  transition: color 0.3s ease;
+}
+
+ul li a:hover {
+  color: #0056b3; /* 悬停时颜色变化 */
 }
 
 .footer {
   text-align: center;
-  margin-top: 3em;
-  font-size: 0.95em;
-  color: #666;
-  padding: 15px 0;
-  background: #f8f9fa;
-  border-top: 1px solid #ddd;
+  padding: 20px;
+  font-size: 1em;
+  color: #777777;
+  background: #f2f2f2;
+  margin-top: 40px;
+  border-radius: 0 0 10px 10px; /* 圆角 */
 }
 
-.button {
-  display: inline-block;
-  padding: 10px 20px;
-  border: 2px solid #007bff;
-  background-color: transparent;
-  border-radius: 5px;
-  color: #007bff;
-  text-transform: uppercase;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.button:hover {
-  background-color: #007bff;
-  color: #ffffff;
+.loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background-color: #007bff; /* 进度条颜色 */
+  width: 0;
+  transition: width 0.5s ease-out;
 }
 
 @media (max-width: 768px) {
-  h1 {
-    font-size: 2.2em;
+  .header h1 {
+    font-size: 2.5em;
   }
 
-  .container {
-    padding: 20px;
-  }
-
-  a {
-    font-size: 1em;
-  }
-  
-  .dir a, .file a {
-    width: auto;
-    max-width: none;
+  .content {
+    padding: 15px;
   }
 }
 </style>
+    <script>
+        window.onload = function() {
+            document.querySelector(".loading-bar").style.width = "100%";
+            setTimeout(function() {
+                document.querySelector(".loading-bar").style.opacity = "0";
+            }, 500);
+        };
+    </script>
     </head>
     <body>
-        <div class="container">
-            <h1>新建文件夹 - AyameMC Maven Repo</h1>
-            <hr>
+        <div class="loading-bar"></div>
+        <div class="content">
             
-            <hr>
-            <a href="../" class="button">../</a><br><br>
-            
-            <hr>
-            <div class="footer">Generated by AyameMC Maven Repo Generator</div>
+            <div class="current-path">
+                新建文件夹
+            </div>
+            <ul>
+                <li><a href="../">../</a></li><li><a href="新建文件夹/">新建文件夹/</a></li>
+            </ul>
         </div>
+        <div class="footer">Generated by AyameMC Maven Repo Generator</div>
     </body>
 </html>
