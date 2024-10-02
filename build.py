@@ -120,7 +120,7 @@ ul li a:hover {
   text-align: center;
   padding: 20px;
   font-size: 1em;
-  color: #777777;
+  color: #aaaaaa; /* 修改为淡灰色 */
   background: #f2f2f2;
   margin-top: 40px;
   border-radius: 0 0 10px 10px; /* 圆角 */
@@ -189,9 +189,9 @@ def generate_index_html(root_dir):
         dirs[:] = [d for d in dirs if not d.startswith('.')]
         files = [f for f in files if not f.startswith('.')]
 
-        # 隐藏根目录的 build.py 和 build.sh 文件
+        # 隐藏根目录的 build.py、build.sh 和 robots.txt 文件
         if root == root_dir:
-            files = [f for f in files if f not in ['build.py', 'build.sh']]
+            files = [f for f in files if f not in ['build.py', 'build.sh', 'robots.txt']]
             content = ''  # 初始化内容为空
         else:
             content = '<li><a href="../">../</a></li>'  # 在非根目录下显示返回上一级的链接
