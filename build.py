@@ -172,7 +172,10 @@ template = '''
                 {content}
             </ul>
         </div>
-        <div class="footer">Copyright © 2024 AyameMC.</div>
+        <div class="footer">
+        Refer to <a href="https://docs.ayamemc.org/docs/dev-doc/intro/#%E9%85%8D%E7%BD%AE%E4%BE%9D%E8%B5%96" >Ayame Docs</a> for detailed usage instructions.<br>
+          Copyright © 2024 AyameMC.
+      </div>
     </body>
 </html>
 '''
