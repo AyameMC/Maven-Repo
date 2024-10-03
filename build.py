@@ -4,27 +4,28 @@ import hashlib
 
 css_styles = """
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'); /* 引入FontAwesome */
 
 body {
-  display: flex; /* 使用 Flexbox 布局 */
-  flex-direction: column; /* 垂直排列子元素 */
-  min-height: 100vh; /* 确保页面高度至少为 100vh */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: 'Roboto', sans-serif;
-  background-color: #f4f7f8; /* 更柔和的背景色 */
-  color: #333333; /* 更深的文本颜色 */
+  background-color: #fefcff; /* 使用更浅的主题色 */
+  color: #333333;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  align-items: center; /* 让内容水平居中 */
-  justify-content: center; /* 让内容垂直居中 */
+  align-items: center;
+  justify-content: center;
 }
 
 .header {
   text-align: center;
   padding: 40px 20px 20px;
-  background-color: #007bff; /* 主色调 */
-  color: #ffffff; /* 白色文字 */
-  border-radius: 10px 10px 0 0; /* 圆角 */
+  background-color: #e891f5; /* 主色调 */
+  color: #ffffff;
+  border-radius: 10px 10px 0 0;
 }
 
 .header h1 {
@@ -35,55 +36,54 @@ body {
 }
 
 .subheader {
-  color: #ffffff; /* 白色子标题 */
+  color: #ffffff;
   font-size: 1.1em;
   margin-top: 10px;
 }
-
 
 .content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* 内容顶部对齐 */
+  justify-content: flex-start;
   margin: 20px auto;
   padding: 20px;
-  max-width: 800px; /* 设置最大宽度 */
-  width: 90%; /* 确保在小屏幕上宽度自适应 */
-  border: 1px solid #cccccc;
+  max-width: 800px;
+  width: 90%;
+  border: 1px solid #e16df2;
   border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 更加柔和的阴影 */
-  background-color: #ffffff; /* 内容区域背景色 */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
 }
 
 a {
-  color: #007bff; /* 链接颜色与主色调一致 */
+  color: #e16df2;
   text-decoration: none;
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
 a:hover {
-  color: #0056b3; /* 悬停时颜色变化 */
+  color: #d226eb;
   transform: scale(1.05);
 }
 
 .info {
   margin-bottom: 20px;
-  background: #f9f9f9;
+  background: #f3c7fa;
   line-height: 1.8;
   font-size: 1.1em;
   text-align: left;
   width: 100%;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 添加信息框的阴影 */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .current-path {
   margin-bottom: 20px;
   color: #666666;
   font-size: 1em;
-  text-align: left; /* 居左对齐 */
+  text-align: left;
   width: 100%;
 }
 
@@ -99,21 +99,21 @@ ul li {
   border-radius: 5px;
   padding: 10px;
   background-color: #f6f6f6;
-  transition: transform 0.3s ease, background-color 0.3s ease; /* 添加背景色过渡效果 */
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 ul li:hover {
   transform: scale(1.02);
-  background-color: #eaeaea; /* 悬停时背景色变化 */
+  background-color: #efb5f8;
 }
 
 ul li a {
-  color: #007bff; /* 与链接一致的颜色 */
+  color: #e16df2;
   transition: color 0.3s ease;
 }
 
 ul li a:hover {
-  color: #0056b3; /* 悬停时颜色变化 */
+  color: #d226eb;
 }
 
 .footer {
@@ -121,9 +121,7 @@ ul li a:hover {
   padding: 20px;
   font-size: 1em;
   color: #aaaaaa; /* 修改为淡灰色 */
-  background: #f2f2f2;
   margin-top: 40px;
-  border-radius: 0 0 10px 10px; /* 圆角 */
 }
 
 .loading-bar {
@@ -131,7 +129,7 @@ ul li a:hover {
   top: 0;
   left: 0;
   height: 3px;
-  background-color: #007bff; /* 进度条颜色 */
+  background-color: #e891f5;
   width: 0;
   transition: width 0.5s ease-out;
 }
@@ -179,9 +177,9 @@ template = '''
 </html>
 '''
 
-# 修改文件夹模板以在名称后添加斜杠
-dir_template = '<li><a href="{dir_name}/">{dir_name}/</a></li>'
-file_template = '<li><a href="{file_name}">{file_name}</a></li>'
+# 修改文件夹和文件模板以在名称前添加空心图标
+dir_template = '<li><a href="{dir_name}/"><i class="far fa-folder"></i> {dir_name}/</a></li>'
+file_template = '<li><a href="{file_name}"><i class="far fa-file"></i> {file_name}</a></li>'
 
 def generate_index_html(root_dir):
     for root, dirs, files in os.walk(root_dir):
@@ -194,17 +192,17 @@ def generate_index_html(root_dir):
             files = [f for f in files if f not in ['build.py', 'build.sh', 'robots.txt']]
             content = ''  # 初始化内容为空
         else:
-            content = '<li><a href="../">../</a></li>'  # 在非根目录下显示返回上一级的链接
+            content = '<li><a href="../"><i class="fas fa-level-up-alt"></i> ../</a></li>'  # 在非根目录下显示返回上一级的链接
 
         # Generate current path information
         current_path = os.path.relpath(root, start=root_dir)
         current_path = current_path.replace('\\', '/')  # for Windows compatibility
 
         for dir_name in dirs:
-            content += dir_template.format(dir_name=dir_name)  # 添加斜杠
+            content += dir_template.format(dir_name=dir_name)  # 添加图标和斜杠
         for file_name in files:
             if file_name not in ['index.html', 'info.json', 'info.md']:
-                content += file_template.format(file_name=file_name)
+                content += file_template.format(file_name=file_name)  # 添加图标
 
         # Generate info.json
         info = {"files": [], "dirs": []}
