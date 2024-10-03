@@ -150,6 +150,7 @@ template = '''
 <html>
     <head>
     <meta charset="utf-8">
+    <title>AyameMC Maven Repo</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <style>{css_styles}</style>
     <script>
@@ -173,8 +174,8 @@ template = '''
             </ul>
         </div>
         <div class="footer">
-        Refer to <a href="https://docs.ayamemc.org/docs/dev-doc/intro/#%E9%85%8D%E7%BD%AE%E4%BE%9D%E8%B5%96" >Ayame Docs</a> for detailed usage instructions.<br>
-          Copyright © 2024 AyameMC.
+        AyameMC Maven Repo<br>
+        Learn usage on <a href="https://docs.ayamemc.org/docs/dev-doc/intro/#%E9%85%8D%E7%BD%AE%E4%BE%9D%E8%B5%96" >Ayame Docs</a>.
       </div>
     </body>
 </html>
