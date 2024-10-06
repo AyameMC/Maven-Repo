@@ -1,6 +1,8 @@
 import os
 import json
 import hashlib
+from xml.etree.ElementTree import Element, SubElement, tostring
+from xml.dom.minidom import parseString
 
 css_styles = """
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
@@ -229,4 +231,54 @@ def generate_index_html(root_dir):
         with open(os.path.join(root, 'index.html'), 'w') as f:
             f.write(index_content)
 
+# 定义生成pom.xml的函数
+def create_pom(group_id, artifact_id, version, jar_file):
+    # 创建pom.xml的根元素
+    project = Element('project', {
+        'xmlns': 'http://maven.apache.org/POM/4.0.0',
+        'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+        'xsi:schemaLocation': 'http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd',
+        'modelVersion': '4.0.0'
+    })
+    
+    # 项目基本信息
+    groupId_elem = SubElement(project, 'groupId')
+    groupId_elem.text = group_id
+    
+    artifactId_elem = SubElement(project, 'artifactId')
+    artifactId_elem.text = artifact_id
+    
+    version_elem = SubElement(project, 'version')
+    version_elem.text = version
+    
+    # 将 ElementTree 转换为字符串并格式化
+    xml_string = tostring(project, 'utf-8')
+    pretty_xml_as_string = parseString(xml_string).toprettyxml(indent="    ")
+    
+    # 将pom.xml写入到文件中
+    pom_file_name = jar_file.replace('.jar', '-pom.xml')
+    with open(pom_file_name, 'w') as f:
+        f.write(pretty_xml_as_string)
+    
+    print(f'生成 {pom_file_name} 成功')
+
+# 遍历当前目录，查找jar文件
+def generate_poms_for_jars():
+    current_dir = os.getcwd()
+    
+    # 遍历当前目录和子目录中的文件
+    for root, dirs, files in os.walk(current_dir):
+        for file in files:
+            if file.endswith('.jar'):
+                jar_path = os.path.join(root, file)
+                
+                # 使用文件名作为artifactId，版本默认为1.0.0，groupId为com.example
+                artifact_id = os.path.splitext(file)[0]
+                version = '1.0.0'
+                group_id = 'com.example'
+                
+                # 生成pom.xml
+                create_pom(group_id, artifact_id, version, file)
+
+generate_poms_for_jars()
 generate_index_html('.')
