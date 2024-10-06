@@ -256,7 +256,7 @@ def create_pom(group_id, artifact_id, version, jar_file, jar_dir):
     pretty_xml_as_string = parseString(xml_string).toprettyxml(indent="    ")
     
     # 生成pom的路径和文件名
-    pom_file_name = os.path.join(jar_dir, f'{artifact_id}.pom')
+    pom_file_name = os.path.join(jar_dir, f'{artifact_id}-{version}.pom')
     
     # 将pom写入到文件中
     with open(pom_file_name, 'w') as f:
@@ -266,7 +266,7 @@ def create_pom(group_id, artifact_id, version, jar_file, jar_dir):
 
     # 生成sha1
     generate_sha1(pom_file_name)
-    
+
 def generate_sha1(pom_file_name):
     """计算pom文件的SHA-1校验和并生成pom.sha1文件"""
     sha1 = hashlib.sha1()
