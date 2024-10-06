@@ -232,7 +232,7 @@ def generate_index_html(root_dir):
             f.write(index_content)
 
 # 定义生成pom.xml的函数
-def create_pom(group_id, artifact_id, version, jar_file):
+def create_pom(group_id, artifact_id, version, jar_file, jar_dir):
     # 创建pom.xml的根元素
     project = Element('project', {
         'xmlns': 'http://maven.apache.org/POM/4.0.0',
@@ -255,8 +255,10 @@ def create_pom(group_id, artifact_id, version, jar_file):
     xml_string = tostring(project, 'utf-8')
     pretty_xml_as_string = parseString(xml_string).toprettyxml(indent="    ")
     
+    # 生成pom.xml的路径和文件名
+    pom_file_name = os.path.join(jar_dir, f'{artifact_id}-pom.xml')
+    
     # 将pom.xml写入到文件中
-    pom_file_name = jar_file.replace('.jar', '-pom.xml')
     with open(pom_file_name, 'w') as f:
         f.write(pretty_xml_as_string)
     
@@ -277,8 +279,8 @@ def generate_poms_for_jars():
                 version = '1.0.0'
                 group_id = 'com.example'
                 
-                # 生成pom.xml
-                create_pom(group_id, artifact_id, version, file)
+                # 生成pom.xml在jar所在目录
+                create_pom(group_id, artifact_id, version, file, root)
 
 generate_poms_for_jars()
 generate_index_html('.')
