@@ -274,13 +274,18 @@ def generate_poms_for_jars():
             if file.endswith('.jar'):
                 jar_path = os.path.join(root, file)
                 
-                # 使用文件名作为artifactId，版本默认为1.0.0，groupId为com.example
-                artifact_id = os.path.splitext(file)[0]
-                version = '1.0.0'
-                group_id = 'com.example'
+                # 假设文件路径符合 Maven 仓库的目录结构
+                relative_path = os.path.relpath(root, current_dir)
+                path_parts = relative_path.split(os.sep)
                 
-                # 生成pom.xml在jar所在目录
-                create_pom(group_id, artifact_id, version, file, root)
+                # 检查路径是否至少包含 groupId, artifactId 和 version 部分
+                if len(path_parts) >= 3:
+                    group_id = ".".join(path_parts[:-2])  # 获取groupId
+                    artifact_id = path_parts[-2]  # 获取artifactId
+                    version = path_parts[-1]  # 获取version
+
+                    # 生成pom.xml在jar所在目录
+                    create_pom(group_id, artifact_id, version, file, root)
 
 generate_poms_for_jars()
 generate_index_html('.')
